@@ -1,0 +1,40 @@
+{% extends 'web_project/main.html' %}
+{% load static %}
+{% block content %}
+
+<h3>Hello, {{name}}!</h3> 
+
+ 				<a  style="float:right; margin:5px;" class="btn btn-success" href="{% url 'savedaddress' %}">Saved Addresses</a>
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Past Orders </th>
+					<th>Date Ordered</th>
+					<th>Quantity</th>
+					<th>Total Price </th>
+					<th>Complete Status?</th>
+
+				</tr>
+
+				{% for item in order_items %}
+
+				<tr>
+					<td>{{item.name.name}}</td>
+					<td>{{item.order.date_ordered}}</td>
+					<td>{{item.quantity}}</td>
+					<td>{{item.order.cart_total}}</td>
+					<td>{{item.order.complete}}</td>
+
+				</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+
+
+{% endblock content %}

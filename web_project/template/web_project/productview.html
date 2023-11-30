@@ -1,0 +1,86 @@
+{% extends 'web_project/main.html' %}
+{% load static %}
+{% block content %}
+
+<a  class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Continue Shopping</a>
+
+<div class="container my-4">
+
+    <div class="row">
+    <div class="col-md-4">
+    <div class="row">
+ <p class="text-uppercase">Average Rating by Buyers: {{rate_average|floatformat:2}}</p>
+
+<img class="thumbnail1" src="{{product.imageurl}}">    
+    </div>
+    </div>
+    <div class="col-md-6">
+     <h5> {{product.name}} </h5>
+    <p> <strong>Rs.{{product.price}}</strong> </p>
+    <p> {{product.description}} </p>
+    </div>
+
+    <div class="col-lg-12">
+    <button data-uniqueid="{{product.uniqueid}}" data-action="add" class="btn btn-outline-primary add-btn mx-4 update-cart">Add to Cart</button>
+	  <button data-uniqueid="{{product.uniqueid}}" data-action="add" class="btn btn-outline-primary add-btn update-wishlist">Wishlist</button>
+
+
+
+</div>
+ <div class="col-lg-12">
+    <h5 class="text-uppercase font-weight-bold"> Write Your Review </h5>
+
+ <form class="form-group" method="GET" action="/review/{{product.name}}/{{product.uniqueid}}">
+
+ <input type="hidden" name="product_uniqueid" id="product_uniqueid" value="{{product.uniqueid}}"/>
+
+ 
+   <div class ="form-group">
+        <textarea class="input" type="text" name="review" placeholder="Add Your Review"> </textarea>
+   </div>
+<div class ="form-group">
+   <div class= "input rating">
+    <p class="text-uppercase">Your Rating: </p>
+    <div class ="rating-wrapper">
+    <div class="stars">
+  <form action="//review/{{product.name}}/{{product.uniqueid}}">
+    <input class="star star-5" id="star-5" type="radio" name="rate" value="5"/>
+    <label class="star star-5" for="star-5"></label>
+    <input class="star star-4" id="star-4" type="radio" name="rate" value="4"/>
+    <label class="star star-4" for="star-4"></label>
+    <input class="star star-3" id="star-3" type="radio" name="rate" value="3"/>
+    <label class="star star-3" for="star-3"></label>
+    <input class="star star-2" id="star-2" type="radio" name="rate" value="2"/>
+    <label class="star star-2" for="star-2"></label>
+    <input class="star star-1" id="star-1" type="radio" name="rate" value="1"/>
+    <label class="star star-1" for="star-1"></label>
+
+
+  </form>
+</div>
+</div>
+</div>
+</form>
+
+
+<button class="btn btn-outline-primary add-btn mx-4">Send Your Review</button>
+
+
+<div class="container mt-5">
+
+    <h5 class="text-uppercase font-weight-bold"> Reviews </h5>
+
+    {% for review in reviews%}
+    <p> <strong>{{review.customer}}:</strong> </p>
+    <p> <strong>Rating: {{review.rate}}/5</strong> </p>
+    <p> <i>"{{review.review}}"</i>  </p>
+    <p> <i>Date added : {{review.date_added}}</i> </p>
+  {%endfor %}
+
+
+
+
+</form>
+</div>
+
+{% endblock content %}

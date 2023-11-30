@@ -1,0 +1,38 @@
+{% extends 'web_project/main.html' %}
+{% load static %}
+{% block content %}
+
+<h3>Hello, {{name}}!</h3> 
+
+
+
+
+<div class="row">
+	<div class="col-md">
+		<div class="card card-body">
+			<table class="table table-sm">
+				<tr>
+					<th>Used Address </th>
+					<th>City</th>
+					<th>State</th>
+					<th>Zipcode </th>
+
+				</tr>
+
+				{% for item in address %}
+
+				<tr>
+					<td>{{item.address}}</td>
+					<td>{{item.city}}</td>
+					<td>{{item.state}}</td>
+					<td>{{item.zipcode}}</td>
+				</tr>
+				{% endfor %}
+
+			</table>
+		</div>
+	</div>
+</div>
+
+
+{% endblock content %}

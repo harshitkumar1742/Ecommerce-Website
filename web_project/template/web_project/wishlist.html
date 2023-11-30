@@ -1,0 +1,68 @@
+{% extends 'web_project/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="box-element">
+		<tr>
+	<table class="table">
+		<th><h5>Items: <strong>{{order.wishlist_item_total}}</strong></h5></th>
+		<th><h5>Total:<strong> Rs.{{order.wishlist_total|floatformat:2}}</strong></h5></th>
+			<th>
+		<a  class="btn btn-outline-dark" href="{% url 'store' %}">&#x2190; Continue Shopping</a>
+
+		</tr>
+
+	</table>
+<br>
+	<br>
+
+
+</div>
+		</div>
+
+		<br>
+    <div class="col-lg-12">
+
+<div class="box-element">
+        <div class="cart-row">
+		<div style="flex:2"></div>
+		<div style="flex:2"><strong>Item</strong></div>
+		<div style="flex:1"><strong>Price</strong></div>
+		<div style="flex:1"><strong>Quantity</strong></div>
+		<div style="flex:1"><strong>Total</strong></div>
+		<div style="flex:1"><strong>Buy Now!</strong></div>
+	
+
+</div>
+
+<div class="box-element">
+{% for item in order_items %}
+	<div class="cart-row">
+		<div style="flex:2"><img class="row-image" src="{{item.name.imageurl}}"></div>
+		<div style="flex:2"><p>{{item.name.name}}</p></div>
+		<div style="flex:1"><p>Rs.{{item.name.price|floatformat:2}}</p></div>
+		<div style="flex:1">
+			<p class="quantity">{{item.quantity}}</p>
+            <div class="quantity">
+
+				<img data-uniqueid={{item.name.uniqueid}} data-action="add" class= "chg-quantity update-wishlist" src="{% static  'img/arrow-up.png' %}">
+		
+				<img data-uniqueid={{item.name.uniqueid}} data-action="remove" class="chg-quantity update-wishlist" src="{% static  'img/arrow-down.png' %}">
+				
+			</div>
+		</div>
+		<div style="flex:1"><p>Rs.{{item.take_total}}</p></div>
+		<button data-uniqueid="{{item.name.uniqueid}}" data-action="add and remove" class="btn btn-outline-secondary add-btn update-cart update-wishlist">Move to Cart</button>
+		<button data-uniqueid="{{item.name.uniqueid}}" data-action="delete" class="btn btn-outline-secondary add-btn update-wishlist">Remove</button>
+
+
+
+
+	</div>
+	{% endfor %}
+
+</div>
+{% endblock content %}
+

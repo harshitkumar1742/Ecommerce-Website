@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+    <head>
+           <title>ART STORE</title>
+
+          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+          <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+          <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+          <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+          
+          
+
+        <script type="text/javascript">
+          var user = '{{request.user}}'
+//https://docs.djangoproject.com/en/3.2/ref/csrf/
+//https://www.cssscript.com/simple-5-star-rating-system-with-css-and-html-radios/  
+
+//csrf token
+          function getToken(name) {
+          let cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              const cookies = document.cookie.split(';');
+              for (let i = 0; i < cookies.length; i++) {
+                  const cookie = cookies[i].trim();
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+            }
+        }
+    }
+    return cookieValue;
+}
+const csrftoken = getToken('csrftoken');
+
+
+//for guest user cart. this will create Cart variable in console. This we do so that we always have access to an empty cart despite the user being authenticated or not. 
+      function getCookie(name) {
+        var cookieArr= document.cookie.split(";");
+            for (var i = 0; i < cookieArr.length; i++) {
+              var cookiePair=cookieArr[i].split("=");
+
+                  if (name== cookiePair[0].trim()){
+
+                    return decodeURIComponent(cookiePair[1]);
+                    
+                  }
+
+
+            }
+    return null;
+}
+//converting JSON text to javascript object 
+var cart = JSON.parse(getCookie('cart'))
+if (cart == undefined) {
+  cart={}
+  console.log("cart was created")
+  document.cookie = 'cart=' + JSON.stringify(cart) + ";domain=;path=/"
+}
+console.log('Cart:', cart)
+
+
+
+//for guest wishlist 
+
+ function getCookie(name) {
+        var cookieArr= document.cookie.split(";");
+            for (var i = 0; i < cookieArr.length; i++) {
+              var cookiePair=cookieArr[i].split("=");
+
+                  if (name== cookiePair[0].trim()){
+
+                    return decodeURIComponent(cookiePair[1]);
+                    
+                  }
+
+
+            }
+    return null;
+}
+//converting JSON text to javascript object 
+var wishlist = JSON.parse(getCookie('wishlist'))
+if (wishlist == undefined) {
+  wishlist={}
+  console.log("wishlist was created")
+  document.cookie = 'wishlist=' + JSON.stringify(wishlist) + ";domain=;path=/"
+}
+console.log('Wishlist:', wishlist)
+
+    
+        </script>
+
+
+
+
+
+     </head>
+     <body>
+
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="{% url 'store' %}"><strong>ART STORE</strong></a>
+  <a class="navbar-brand" href="{% url 'movies' %}">Movies</a>
+  <a class="navbar-brand" href="{% url 'books' %}">Books</a>
+  <a class="navbar-brand" href="{% url 'music' %}">Digital Music</a>
+   
+	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	    <span class="navbar-toggler-icon"></span>
+	  </button>
+
+      
+<! this is for both search bar and autocomplete>
+  
+  <form action="{% url 'search' %}"  method="GET" class="d-flex">
+  <input type="text" list="searchlist" name="search" id="search" placeholder="Search" aria-label="Search" class="form-control" required/>
+  <datalist id="searchlist">
+  {% for product in products%}
+  <option value ="{{product.name}}">
+  <option value ="{{product.categoryname}}">
+   <option value ="{{product.price}}">
+    <option value ="{{product.description}}">
+
+  {%endfor%}
+  </datalist>
+  <button class="btn btn-outline-dark" type="submit">Search</button>
+</form>
+
+
+
+ <div class="collapse navbar-collapse" id="navbarSupportedContent">
+	    <ul class="navbar-nav mr-auto">
+	   </ul>
+   <div class="form-inline my-2 my-lg-0">
+
+<! Log In button will be displayed if user is not authenticated otherwise log out button displayed if they are>
+
+			
+{% if user_name %}
+      <span> Hello, Anonymous User! </span>
+<div class="box-element" id="login-button">
+				<a  class="btn btn-outline-dark" href="{% url 'login' %}">Login/Sign Up</a>
+    </div>
+{% else %}
+	<a  class="btn btn-outline-dark" href="{% url 'userprofile' %}"> My Account </a>
+<div class="box-element" id="logout-button">
+				<a  class="btn btn-outline-dark" href="{% url 'logout' %}">Logout</a>
+    </div>
+ {% endif %}
+ 
+
+      <a href="{% url 'wishlist' %}"> 
+        <img  id="wishlist-icon" src="{% static 'img/wishlist.png' %}">
+      </a>
+
+      <p id="wishlist-total">{{wishlistItems}}</p>
+     	
+     	<a href="{% url 'cart' %}">
+    		<img  id="cart-icon" src="{% static 'img/6+cart.png' %}">
+    	</a>
+    	<p id="cart-total">{{cartItems}}</p>
+  </div>
+   
+
+</div>
+         
+</nav>
+
+<div class="container">
+            {% block content %}
+
+            {% endblock content %}
+  </div>
+         
+           
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="{% static 'js/cart.js' %}"></script>
+  <script type="text/javascript" src="{% static 'js/wishlist.js' %}"></script>
+  
+
+
+</head>
+</body>
+</html>

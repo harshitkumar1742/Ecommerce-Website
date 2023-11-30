@@ -1,0 +1,29 @@
+{% extends 'web_project/main.html' %}
+{% load static %}
+{% block content %}
+
+<div class="row">
+	{% for product in products %}
+	<div class="col-lg-4">
+    <img class="thumbnail" src="{{product.imageurl}}">
+		<div class="box-element product">
+        	<h6><strong>{{product.name}}</strong><h7 style="display: inline-block; float: right"><strong>Rs.{{product.price|floatformat:2}}</strong> </h6>
+
+            <hr>
+            <button data-uniqueid="{{product.uniqueid}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+			<button data-uniqueid="{{product.uniqueid}}" data-action="add" class="btn btn-outline-secondary add-btn update-wishlist">Wishlist</button>
+		
+
+		<a class="btn btn-outline-success" href="/shop/products/{{product.name}}/{{product.uniqueid}}">View Product</a>
+	
+
+		</div>
+	</div>
+
+	{% endfor %}
+</div>	
+
+{% endblock content %}
+
+
+
